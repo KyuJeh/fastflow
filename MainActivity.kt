@@ -104,6 +104,8 @@ class MainActivity : Activity() {
         w = WebView(this)
         setContentView(w)
         bar(if (night()) Color.BLACK else Color.parseColor("#f3f7f5"), night())
+        w.isVerticalScrollBarEnabled = false
+        w.isHorizontalScrollBarEnabled = false
         w.settings.javaScriptEnabled = true
         w.settings.domStorageEnabled = true
         w.addJavascriptInterface(Br(this), "Android")
