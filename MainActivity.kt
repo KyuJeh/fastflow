@@ -36,7 +36,7 @@ object Sched {
         channel(c)
         val open = PendingIntent.getActivity(c, 0, Intent(c, MainActivity::class.java), FLAGS)
         val n = Notification.Builder(c, CH)
-            .setSmallIcon(R.drawable.fg)
+            .setSmallIcon(R.drawable.ni)
             .setContentTitle(t)
             .setContentText(b)
             .setStyle(Notification.BigTextStyle().bigText(b))
