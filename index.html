@@ -74,12 +74,19 @@ input[type=range]{width:100%;accent-color:var(--ac)}
 .cc{position:relative;background:var(--bg);border-radius:12px;padding:5px 0;text-align:center;min-height:54px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;overflow:hidden}
 .cc:before{content:"";position:absolute;inset:0;background:var(--ac);opacity:calc(var(--a,0)*.45)}
 .cc b,.cc span{position:relative}.cc b{font-weight:500;color:var(--mu);font-size:12px}.cc span{font-weight:700;font-size:13px}.cc.x span{color:#ff5a6a;font-size:16px}
+.tap{cursor:pointer;background:var(--bg);border-radius:16px;padding:8px 0;transition:transform .2s,background-color .5s}.tap:active{transform:scale(.94)}
+.ov.b{align-items:flex-end;padding:0}.sheet{background:var(--card);width:100%;max-width:480px;border-radius:28px 28px 0 0;padding:24px 18px calc(22px + env(safe-area-inset-bottom,0px));transform:translateY(100%);transition:transform .5s cubic-bezier(.2,.9,.2,1)}.ov.on .sheet{transform:none}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0}.opt{background:var(--bg);border-radius:18px;padding:14px 8px;text-align:center;transition:background-color .3s,color .3s,transform .2s}.opt:active{transform:scale(.96)}.opt b{display:block;font-size:22px}.opt small{color:var(--mu);font-size:13px}.opt.on{background:var(--ac);color:var(--on)}.opt.on small{color:var(--on);opacity:.75}
 .lnk{background:none;color:var(--ac);font-weight:600;padding:6px 0}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.01s!important}}
 </style>
 </head>
 <body>
 <div class="ov" id="ov"><div class="dlg"><div style="font-size:44px">🤔</div><h1>Masih puasa?</h1><p class="mu" id="ovt"></p><div class="btns" style="flex-direction:column"><button class="btn" id="yes">Ya, masih puasa</button><button class="btn s" id="no">Tidak, hentikan timer</button></div></div></div>
+<div class="ov b" id="sh"><div class="sheet"><h1 style="margin:0">Jadwal diet</h1><div class="mu">Pilih jam puasa dan jam makan</div>
+  <div class="opts" id="opts"></div>
+  <div class="mu" id="shv" style="margin-bottom:6px"></div><input type="range" min="12" max="23" id="shr">
+  <button class="btn" id="shx" style="width:100%;margin-top:18px">Tutup</button></div></div>
 <div class="toast" id="toast"><b id="tt"></b><span id="tb"></span></div>
 <div class="app">
 
@@ -90,10 +97,9 @@ input[type=range]{width:100%;accent-color:var(--ac)}
       <svg viewBox="0 0 220 220"><circle class="bg" cx="110" cy="110" r="96"/><circle class="pg" id="pg" cx="110" cy="110" r="96"/></svg>
       <div class="mid"><div class="st" id="st">…</div><div class="cd" id="cd"></div><div class="mu" id="pc">0%</div></div>
     </div>
-    <div class="row"><div><b id="e1">–</b><span>Sudah berjalan</span></div><div><b id="e2">–</b><span id="e2l">Berikutnya</span></div><div><b id="e3">16:8</b><span>Jadwal</span></div></div>
+    <div class="row"><div><b id="e1">–</b><span>Sudah berjalan</span></div><div><b id="e2">–</b><span id="e2l">Berikutnya</span></div><div class="tap" id="jd"><b id="e3">16:8</b><span>Jadwal</span></div></div>
     <div class="mu" id="res" style="text-align:center;margin-top:14px"></div>
-    <div class="f" style="margin-top:14px;border-top:1px solid var(--line);border-bottom:0"><div>Target puasa<small id="tg"></small></div><div class="btns" style="flex:none;gap:8px"><button class="btn g" id="tm" style="flex:0 0 54px;padding:10px">−</button><button class="btn g" id="tp" style="flex:0 0 54px;padding:10px">+</button></div></div>
-    <div class="btns" id="ctl" style="margin-top:6px"><button class="btn" id="b1">Mulai puasa</button></div>
+    <div class="btns" id="ctl" style="margin-top:14px"><button class="btn" id="b1">Mulai puasa</button></div>
     <div class="btns" id="ctl2" style="margin-top:10px;display:none"><button class="btn s" id="b3">Pause</button><button class="btn s" id="b2">Berhenti</button></div>
   </div>
   <div class="card"><h2>✨ Semangat hari ini</h2><div class="quote" id="qt"></div></div>
@@ -187,7 +193,7 @@ function tick(){const now=new Date(),f=S.set.fast;
   $('#e1').textContent=fmt(ref-c.from).slice(0,5);$('#e2').textContent=hm(c.to);$('#e2l').textContent=eat?'Puasa mulai':'Boleh makan';
   $('#b1').textContent=eat?'Mulai puasa sekarang':'Makan sekarang';
   $('#b3').textContent=c.paused?'Lanjutkan':'Pause';$('#b2').textContent=bc?'Ketuk lagi':'Berhenti'}
- $('#e3').textContent=f+':'+(24-f);$('#tg').textContent=f+' jam puasa · makan '+(24-f)+' jam';
+ $('#e3').textContent=f+':'+(24-f);
  if(!idle&&!c.paused){const k2='n'+ +c.to,so=S.set.soon;
   if(so>0&&c.to-now<=so*6e4&&now<c.to&&!S.last[k2])fire(eat?'⏳ Jendela makan hampir habis':'⏳ Target puasa hampir tercapai',so+' menit lagi.',k2);
   if(!eat&&now>=c.to&&now-c.to<3e5){const k3='t'+ +c.to;if(!S.last[k3])fire('🍽️ Target puasa tercapai!','Kamu boleh makan. Tekan Makan saat mulai makan.',k3)}}
@@ -253,8 +259,15 @@ $('#b1').onclick=()=>{const n=Date.now(),q=S.run,f=S.set.fast;
  else{const ref=q.pa||n,ms=ref-q.t0;S.fl.push([q.t0,ref,ms]);S.fl=S.fl.slice(-500);S.res=[ms,f*36e5];S.run={p:'eat',t0:n,pa:null};
   alertUser('🍽️ Selamat makan! Puasa '+hmT(ms),(ms>=f*36e5?'+':'−')+hmT(ms-f*36e5)+' dari target '+f+' jam')}
  save();tick();renderDays();renderCal()};
-const stp=d=>{S.set.fast=Math.min(23,Math.max(12,S.set.fast+d));save();renderSet();tick();renderCal()};
-$('#tm').onclick=()=>stp(-1);$('#tp').onclick=()=>stp(1);
+const OPT=[[12,'12:12'],[14,'14:10'],[16,'16:8'],[18,'18:6'],[20,'20:4'],[23,'OMAD 23:1']];
+function renderOpt(){$('#opts').innerHTML=OPT.map(([f,l])=>`<button class="opt${S.set.fast===f?' on':''}" data-f="${f}"><b>${l}</b><small>Puasa ${f}j · makan ${24-f}j</small></button>`).join('');
+ $('#shr').value=S.set.fast;$('#shv').textContent='Atur sendiri: puasa '+S.set.fast+' jam, makan '+(24-S.set.fast)+' jam'}
+function setFast(f){S.set.fast=f;save();renderSet();renderOpt();tick();renderCal()}
+const shut=()=>$('#sh').classList.remove('on');
+$('#jd').onclick=()=>{renderOpt();$('#sh').classList.add('on')};
+$('#opts').onclick=e=>{const b=e.target.closest('.opt');if(b){setFast(+b.dataset.f);shut()}};
+$('#shr').oninput=e=>setFast(+e.target.value);
+$('#shx').onclick=shut;$('#sh').onclick=e=>{if(e.target.id==='sh')shut()};
 $('#b3').onclick=()=>{const q=S.run,n=Date.now();if(!q)return;if(q.pa){q.t0+=n-q.pa;q.pa=null}else q.pa=n;save();tick()};
 $('#b2').onclick=()=>{if(++bc<2){setTimeout(()=>{bc=0},3000);tick();return}bc=0;const q=S.run;
  if(q&&q.p==='fast'){const ref=q.pa||Date.now(),ms=ref-q.t0;if(ms>6e4)S.fl.push([q.t0,ref,ms])}
