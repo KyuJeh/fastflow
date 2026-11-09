@@ -18,8 +18,9 @@ jobs:
       - name: Susun proyek Android
         run: |
           P=com/gabs/fastflow
-          mkdir -p app/src/main/{assets,java/$P,res/drawable,res/mipmap-anydpi-v26}
+          mkdir -p app/src/main/{assets,java/$P,res/drawable,res/drawable-nodpi,res/mipmap-anydpi-v26}
           cp index.html app/src/main/assets/index.html
+          cp icon.png app/src/main/res/drawable-nodpi/fg.png
           cp MainActivity.kt app/src/main/java/$P/MainActivity.kt
           cat > settings.gradle <<'E'
           pluginManagement { repositories { google(); mavenCentral(); gradlePluginPortal() } }
@@ -64,20 +65,20 @@ jobs:
           E
           cat > app/src/main/res/drawable/bg.xml <<'E'
           <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
-            <gradient android:type="linear" android:angle="270" android:startColor="#000000" android:centerColor="#03122C" android:endColor="#0A4FC0"/>
+            <gradient android:type="linear" android:angle="270" android:startColor="#055AE6" android:endColor="#0149CE"/>
           </shape>
           E
-          cat > app/src/main/res/drawable/fg.xml <<'E'
+          cat > app/src/main/res/drawable/ni.xml <<'E'
           <vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="108dp" android:height="108dp" android:viewportWidth="108" android:viewportHeight="108">
-            <path android:fillColor="#22D3EE" android:pathData="M33,28 H36 V41 H38.5 V28 H41.5 V41 H44 V28 H47 V43 A7,7 0 0 1 41.5,50 V80 A1.5,1.5 0 0 1 38.5,80 V50 A7,7 0 0 1 33,43 Z"/>
-            <path android:fillColor="#4D9DFF" android:pathData="M59.5,38 A8.5,11 0 1 1 76.5,38 A8.5,11 0 1 1 59.5,38 Z M66.5,47 H69.5 V80 A1.5,1.5 0 0 1 66.5,80 Z"/>
+            <path android:fillColor="#FFFFFF" android:pathData="M33,28 H36 V41 H38.5 V28 H41.5 V41 H44 V28 H47 V43 A7,7 0 0 1 41.5,50 V80 A1.5,1.5 0 0 1 38.5,80 V50 A7,7 0 0 1 33,43 Z"/>
+            <path android:fillColor="#FFFFFF" android:pathData="M59.5,38 A8.5,11 0 1 1 76.5,38 A8.5,11 0 1 1 59.5,38 Z M66.5,47 H69.5 V80 A1.5,1.5 0 0 1 66.5,80 Z"/>
           </vector>
           E
           cat > app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml <<'E'
           <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
             <background android:drawable="@drawable/bg"/>
             <foreground android:drawable="@drawable/fg"/>
-            <monochrome android:drawable="@drawable/fg"/>
+            <monochrome android:drawable="@drawable/ni"/>
           </adaptive-icon>
           E
       - name: Build
